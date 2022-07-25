@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>white lable 2 Client 2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <h2>white lable 2 Client 2 testing user create/update/delete api</h2>
+    <button id="create">Create User</button>
+    <button id="update">Update User</button>
+    <button id="delete">Delete User</button>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+        integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#create").click(function () {
+                //not so usefull for now
+                alert("The create btn was clicked.");
+            });
+
+            $("#update").click(function () {
+                //not so usefull for now
+                alert("The update btn was clicked.");
+            });
+
+            $("#delete").click(function () {
+                //not so usefull for now
+                alert("The delete btn was clicked.");
+            });
+
+            var socket = io("http://localhost:3000", { secure: false });
+
+            //connect to websockets
+            socket.on('connect', function () {
+                console.log("connected on socket " + socket.id);
+            });
+
+            //on disconnection
+            socket.on('disconnect', function () {
+                console.log("disconnected on socket " + socket.id);
+            });
+
+            // socket.on('users_count', function (data) {
+            //     console.log("no of client connected" + data);
+            // });
+
+            socket.emit('create', 'whitelable1Client2');
+
+            //receive message from connected room
+            socket.on('message', function (data) {
+                console.log('Incoming message for whitelable1 client 2:', data);
+            });
+        });
+    </script>
+</body>
+
+</html>

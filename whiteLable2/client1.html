@@ -1,13 +1,13 @@
 <html>
 
 <head>
-    <title>Client 1</title>
+    <title>whitelable 2 Client 1</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 </head>
 
 <body>
-    <h2>Client 1 testing user create/update/delete api</h2>
+    <h2>whitelable 2 Client 1 testing user create/update/delete api</h2>
     <button id="create">Create User</button>
     <button id="update">Update User</button>
     <button id="delete">Delete User</button>
@@ -17,34 +17,41 @@
     <script>
         $(document).ready(function () {
             $("#create").click(function () {
+                //not so usefull func for now
                 alert("The create btn was clicked.");
             });
 
             $("#update").click(function () {
+                //not so usefull  func for now
                 alert("The update btn was clicked.");
             });
 
             $("#delete").click(function () {
+                //not so usefull  func for now
                 alert("The delete btn was clicked.");
             });
 
+            //connect to socket server
             var socket = io("http://localhost:3000", { secure: false });
             socket.on('connect', function () {
                 console.log("connected on socket " + socket.id);
             });
 
+            //disconnect to socker server
             socket.on('disconnect', function () {
                 console.log("disconnected on socket " + socket.id);
             });
 
-            socket.on('users_count', function (data) {
-                console.log("no of client connected" + data);
-            });
+            // socket.on('users_count', function (data) {
+            //     console.log("no of client connected" + data);
+            // });
 
-            socket.emit('create', 'client1');
+            //creation of room
+            socket.emit('create', 'whitelable2Client1');
 
+            //receive messages from a connected room
             socket.on('message', function (data) {
-                console.log('Incoming message:', data);
+                console.log('Incoming message for whitelable 2 client 1:', data);
             });
 
         });
