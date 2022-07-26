@@ -14,11 +14,14 @@
     <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"
         integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
         crossorigin="anonymous"></script>
+    <script src="notify.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#create").click(function () {
-                //not so usefull func for now
-                alert("The create btn was clicked.");
+                //run some long running action
+                $.post("http://localhost:3000/someLongRunningAction", { name: "white lable 1 client 1", room: "whitelable1Client1Room" }).done(function () {
+                    $.notify("Triggered Long running action");
+                });
             });
 
             $("#update").click(function () {
@@ -47,10 +50,11 @@
             // });
 
             //creation of room
-            socket.emit('create', 'whitelable1Client1');
+            socket.emit('create', 'whitelable1Client1Room');
 
             //receive messages from a connected room
             socket.on('message', function (data) {
+                $.notify(data);
                 console.log('Incoming message for whitelable1 client 1:', data);
             });
 
