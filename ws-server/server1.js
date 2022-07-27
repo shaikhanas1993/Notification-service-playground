@@ -28,11 +28,17 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
     httpServer.listen(3000, () => {
         console.log("i m listening on port" + 3000)
     });
+}).catch(e => {
+    console.error(e);
+    process.kill(process.pid, 'SIGTERM');
 });
 
 io.on("connection", (socket) => {
     //do some ceremony work that needs to be done
     console.log("connected to socket " + socket.id);
+    socket.on('createRoom', (room) => {
+        socket.join(room);
+    });
 });
 
 
@@ -84,7 +90,9 @@ app.post('/someLongRunningAction', async (req, res) => {
 
 
 process.on('SIGTERM', () => {
-    httpServer.close(() => {
-        console.log('Process terminated');
-    });
+    if (httpServer.listening) {
+        httpServer.close(() => {
+            console.log('Process terminated');
+        });
+    }
 });

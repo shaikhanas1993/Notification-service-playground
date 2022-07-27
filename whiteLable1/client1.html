@@ -50,7 +50,7 @@
             // });
 
             //creation of room
-            socket.emit('create', 'whitelable1Client1Room');
+            socket.emit('createRoom', 'whitelable1Client1Room');
 
             //receive messages from a connected room
             socket.on('message', function (data) {
