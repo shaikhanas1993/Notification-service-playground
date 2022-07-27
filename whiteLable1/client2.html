@@ -39,6 +39,8 @@
             //connect to websockets
             socket.on('connect', function () {
                 console.log("connected on socket " + socket.id);
+                //creation of room
+                socket.emit('createRoom', 'whitelable1Client2Room');
             });
 
             //on disconnection
@@ -50,7 +52,7 @@
             //     console.log("no of client connected" + data);
             // });
 
-            socket.emit('create', 'whitelable1Client2Room');
+
 
             //receive message from connected room
             socket.on('message', function (data) {

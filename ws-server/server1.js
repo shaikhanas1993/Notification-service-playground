@@ -33,11 +33,11 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
     process.kill(process.pid, 'SIGTERM');
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
     //do some ceremony work that needs to be done
     console.log("connected to socket " + socket.id);
-    socket.on('createRoom', (room) => {
-        socket.join(room);
+    socket.on('createRoom', async (room) => {
+        await io.of('/').adapter.remoteJoin(socket.id, room);
     });
 });
 
@@ -55,12 +55,12 @@ io.of("/").adapter.on("join-room", (room, id) => {
 const triggerLongRunningAction = (client, room) => {
 
     setTimeout(() => {
-        io.sockets.in(room).emit("message", "processing step 1 long running action for" + client);
+        io.to(room).emit("message", "processing step 1 long running action for" + client);
         setTimeout(() => {
-            io.sockets.in(room).emit("message", "processing step 2 long running action for" + client);
+            io.to(room).emit("message", "processing step 2 long running action for" + client);
         }, 200);
         setTimeout(() => {
-            io.sockets.in(room).emit("message", "processing step 3 long running action for" + client);
+            io.to(room).emit("message", "processing step 3 long running action for" + client);
         }, 200);
     }, 200);
 }
@@ -69,6 +69,8 @@ const triggerLongRunningAction = (client, room) => {
 app.post('/someLongRunningAction', async (req, res) => {
     let client = req.body?.name;
     let room = req.body?.room
+
+    //just playing to see the no of sockets connected to a room
     console.log("room " + room);
     try {
 
@@ -78,12 +80,7 @@ app.post('/someLongRunningAction', async (req, res) => {
         console.error(e);
     }
 
-    // console.log(req.body)
-
-    // console.log("i m in")
-    // console.log(req.body.name);
-    // console.log(req.body.room);
-    // triggerLongRunningAction(client, room);
+    triggerLongRunningAction(client, room);
     res.send('Running long Running action for client' + client)
 })
 
