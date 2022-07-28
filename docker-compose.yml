@@ -10,8 +10,8 @@ services:
   haproxy2:
     build: ./haproxy2
     links:
-      - app01
-      - app02
+      - app03
+      - app04
     ports:
       - "3001:81"
 
@@ -23,6 +23,20 @@ services:
       - 3000
 
   app02:
+    build: ./ws-server
+    depends_on:
+      - redis
+    expose:
+      - 3000
+
+  app03:
+    build: ./ws-server
+    depends_on:
+      - redis
+    expose:
+      - 3000
+
+  app04:
     build: ./ws-server
     depends_on:
       - redis
