@@ -19,7 +19,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
     cors: {
-        origin: '*',
+        origin: ["http://localhost:8081", "http://localhost:8082"],
         methods: ["GET", "POST"],
         credentials: true
     },
@@ -34,6 +34,7 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
     console.error(e);
     process.kill(process.pid, 'SIGTERM');
 });
+
 pubClient.on("error", (err) => {
     console.log("error while connecting to redis" + err.message);
 });
