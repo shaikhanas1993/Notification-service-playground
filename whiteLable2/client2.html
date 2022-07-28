@@ -24,7 +24,6 @@
                 });
             });
 
-
             $("#update").click(function () {
                 //not so usefull  func for now
                 alert("The update btn was clicked.");
@@ -36,9 +35,11 @@
             });
 
             //connect to socket server
-            var socket = io("http://localhost:3000", { secure: false });
+            var socket = io("http://localhost:3001", { secure: false, withCredentials: true });
             socket.on('connect', function () {
                 console.log("connected on socket " + socket.id);
+                //creation of room
+                socket.emit('createRoom', 'whitelable2Client2Room');
             });
 
             //disconnect to socker server
@@ -46,14 +47,16 @@
                 console.log("disconnected on socket " + socket.id);
             });
 
+            // socket.on('users_count', function (data) {
+            //     console.log("no of client connected" + data);
+            // });
 
-            //creation of room
-            socket.emit('create', 'whitelable2Client2Room');
+
 
             //receive messages from a connected room
             socket.on('message', function (data) {
                 $.notify(data);
-                console.log('Incoming message for whitelable 2 client 2:', data);
+                console.log('Incoming message for whitelable2 client 2:', data);
             });
 
         });

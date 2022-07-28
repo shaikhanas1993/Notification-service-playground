@@ -1,12 +1,19 @@
 version: '3.9'
 services:
-  haproxy:
-    build: ./haproxy
+  haproxy1:
+    build: ./haproxy1
     links:
       - app01
       - app02
     ports:
       - "3000:80"
+  haproxy2:
+    build: ./haproxy2
+    links:
+      - app01
+      - app02
+    ports:
+      - "3001:81"
 
   app01:
     build: ./ws-server
