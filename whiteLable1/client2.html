@@ -34,7 +34,7 @@
                 alert("The delete btn was clicked.");
             });
 
-            var socket = io("http://localhost:3000", { secure: false });
+            var socket = io("http://localhost:3000", { secure: false, withCredentials: true });
 
             //connect to websockets
             socket.on('connect', function () {
@@ -57,7 +57,7 @@
             //receive message from connected room
             socket.on('message', function (data) {
                 $.notify(data);
-                console.log('Incoming message for whitelable1 client 1:', data);
+                console.log('Incoming message for whitelable1 client 2:', data);
             });
         });
     </script>

@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  haproxy:
+    build: ./haproxy
+    links:
+      - app01
+      - app02
+    ports:
+      - "3000:80"
+
+  app01:
+    build: ./ws-server
+    depends_on:
+      - redis
+    expose:
+      - 3000
+
+  app02:
+    build: ./ws-server
+    depends_on:
+      - redis
+    expose:
+      - 3000
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    expose:
+      - 6379

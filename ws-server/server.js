@@ -6,7 +6,7 @@ const { createAdapter } = require("@socket.io/redis-adapter");
 const { createClient } = require("redis");
 
 var cors = require('cors')
-const pubClient = createClient({ url: "redis://localhost:6379" });
+const pubClient = createClient({ url: "redis://redis:6379" });
 
 const subClient = pubClient.duplicate();
 const app = express();
@@ -20,6 +20,8 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
         origin: '*',
+        methods: ["GET", "POST"],
+        credentials: true
     },
     adapter: createAdapter(pubClient, subClient)
 });
@@ -31,6 +33,13 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 }).catch(e => {
     console.error(e);
     process.kill(process.pid, 'SIGTERM');
+});
+pubClient.on("error", (err) => {
+    console.log("error while connecting to redis" + err.message);
+});
+
+subClient.on("error", (err) => {
+    console.log("error while connecting to redis" + err.message);
 });
 
 io.on("connection", async (socket) => {
@@ -84,7 +93,10 @@ app.post('/someLongRunningAction', async (req, res) => {
     res.send('Running long Running action for client' + client)
 })
 
-
+// Health check
+app.head('/health', function (req, res) {
+    res.sendStatus(200);
+});
 
 process.on('SIGTERM', () => {
     if (httpServer.listening) {
